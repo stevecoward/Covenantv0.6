@@ -20,6 +20,7 @@ using Covenant.Models.Launchers;
 using Covenant.Models.Grunts;
 using Covenant.Models.Indicators;
 using System.Text;
+using Covenant.Models.MitreTechniques;
 
 namespace Covenant.Models
 {
@@ -41,6 +42,8 @@ namespace Covenant.Models
         public DbSet<GruntCommand> GruntCommands { get; set; }
         public DbSet<CommandOutput> CommandOutputs { get; set; }
         public DbSet<GruntTasking> GruntTaskings { get; set; }
+        public DbSet<MitreTechniqueGruntTask> MitreTechniquesGruntTasks { get; set; }
+        public DbSet<MitreTechnique> MitreTechniques { get; set; }
 
         public DbSet<Event> Events { get; set; }
         public DbSet<CapturedCredential> Credentials { get; set; }

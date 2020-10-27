@@ -83,4 +83,7 @@
       <HintPath>refs\dnlib.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Components\NewFolder\" />
+  </ItemGroup>
 </Project>

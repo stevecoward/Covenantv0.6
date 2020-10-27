@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using YamlDotNet.Serialization;
 
 using Covenant.Core;
+using Covenant.Models.MitreTechniques;
 
 namespace Covenant.Models.Grunts
 {
@@ -50,6 +51,7 @@ namespace Covenant.Models.Grunts
 
         public bool UnsafeCompile { get; set; } = false;
         public bool TokenTask { get; set; } = false;
+        public List<MitreTechniqueGruntTask> TaskMitreTechniques { get; set; } = new List<MitreTechniqueGruntTask>();
 
         public List<GruntTaskOption> Options { get; set; } = new List<GruntTaskOption>();
 

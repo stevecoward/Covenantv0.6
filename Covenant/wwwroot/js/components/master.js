@@ -147,6 +147,149 @@ window.RefreshSelectPicker = (selector) => {
     $(selector).selectpicker('refresh');
 }
 
+window.LoadAttackTechniques = (selector) => {
+    $(selector).change(function () {
+        var mitreTechniqueId = $(this).val();
+        window.LoadAssignedTechniqueData(mitreTechniqueId);
+    });
+}
+
+window.LoadAssignedTechniqueData = (techniqueId) => {
+    $('table[name="assignedTechniques"]').DataTable({
+        ajax: {
+            url: "/api/attack/task-techniques/" + techniqueId,
+            dataSrc: "",
+        },
+        columns: [
+            { data: "id" },
+            { data: "name" },
+            { data: "tactics" },
+            { data: "id" },
+        ],
+        columnDefs: [{
+            targets: 0,
+            width: "5%",
+            render: function (data, type, row, meta) {
+                if (type == "display")
+                    data = "<a href=\"" + row.url + "\" target=\"_blank\">" + row.id + "</a>";
+                return data;
+            }
+        }, {
+            targets: 2,
+            width: "40%",
+        }, {
+            targets: 3,
+            width: "10%",
+            render: function (data, type, row, meta) {
+                if (type == "display") {
+                    data = "<button name=\"removeTechnique\" type=\"button\" class=\"btn btn-danger btn-sm\" data-technique=\"" + row.id + "\">Remove</button>";
+                }
+                return data;
+            }
+        }],
+        destroy: true,
+        initComplete: function (settings, json) {
+            window.ToggleAssignmentButtons();
+            window.LoadRemoveButtonClickEvent();
+        }
+    });
+}
+
+window.ToggleAssignmentButtons = () => {
+    var assignedTechniquesTableRows = $('table[name="assignedTechniques"] > tbody > tr');
+    if (assignedTechniquesTableRows.length == 1
+        && /No data available in table/i.test(assignedTechniquesTableRows.html())
+        && $('select[name="tasks"]').val() == "0") {
+        $('button[name="assignTechnique"]').each(function () {
+            $(this).attr('disabled', true);
+        });
+    } else {
+        $('button[name="assignTechnique"]').each(function () {
+            $(this).attr('disabled', false);
+        });
+    }
+}
+
+window.LoadAssignButtonClickEvent = () => {
+    $('button[name="assignTechnique"]').on('click', function () {
+        var technique = $(this).data('technique');
+        var gruntTaskId = $('select[name="tasks"]').val();
+
+        $.ajax({
+            type: "post",
+            url: "/api/attack/assign/" + technique + "/grunt-task/" + gruntTaskId,
+            success: function (response) {
+                if (response !== null) {
+                    window.LoadAssignedTechniqueData($('select[name="tasks"]').val());
+                } else {
+                    console.log("failed ajax request");
+                }
+            }
+        });
+    });
+}
+
+window.LoadRemoveButtonClickEvent = () => {
+    $('button[name="removeTechnique"]').on('click', function () {
+        var technique = $(this).data('technique');
+        var gruntTaskId = $('select[name="tasks"]').val();
+
+        $.ajax({
+            type: "delete",
+            url: "/api/attack/remove/" + technique + "/grunt-task/" + gruntTaskId,
+            success: function (response) {
+                window.LoadAssignedTechniqueData($('select[name="tasks"]').val());
+            }
+        });
+    });
+}
+
+window.DrawAttackTechniqueDataTable = (selector) => {
+    $(selector).DataTable({
+        ajax: {
+            url: "/api/attack/techniques",
+            dataSrc: "",
+        },
+        columns: [
+            { data: "id" },
+            { data: "name" },
+            { data: "tactics" },
+            { data: "id" },
+        ],
+        columnDefs: [{
+            targets: 0,
+            width: "5%",
+            render: function (data, type, row, meta) {
+                if (type == "display")
+                    data = "<a href=\"" + row.url + "\" target=\"_blank\">" + row.id + "</a>";
+                return data;
+            }
+        }, {
+            targets: 2,
+            width: "40%",
+        }, {
+            targets: 3,
+            width: "10%",
+            render: function (data, type, row, meta) {
+                if (type == "display") {
+                    data = "<button name=\"assignTechnique\" type=\"button\" class=\"btn btn-primary btn-sm\" data-technique=\"" + row.id + "\">Assign</button>";
+                }
+                return data;
+            }
+        }],
+        dom: "<'row'<'col-sm-12'lf>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", //https://datatables.net/examples/basic_init/dom.html
+        destroy: true,
+        paging: false, // TODO: re-visit datatables events to add click event handlers to buttons in table rows.
+        initComplete: function (settings, json) {
+            window.ToggleAssignmentButtons();
+            window.LoadAssignButtonClickEvent();
+        },
+        drawCallback: function (settings) {
+            //works when searching/paging except it runs the event multiple times, adding multiple records
+        }
+    });
+}
+
 window.ShowTab = (selector) => {
     $(selector).tab('show');
 }

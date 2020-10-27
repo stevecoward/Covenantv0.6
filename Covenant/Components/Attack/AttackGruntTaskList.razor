@@ -1,0 +1,96 @@
+﻿@inherits OwningComponentBase<ICovenantService>
+
+@using Microsoft.JSInterop
+@using Covenant.Core
+@using Covenant.Models.Grunts
+@inject IJSRuntime IJSRuntime
+
+<div class="form-row">
+    <div class="form-group col-sm-4">
+        <label for="tasks"><strong>Tasks (# Techniques)</strong></label><br />
+        <select id="tasks" name="tasks" class="selectpicker show-menu-arrow" data-dropup-auto="false" data-width="auto" data-live-search="true" data-selected-text-format="count > 2">
+            <option value="0" selected></option>
+            @foreach (GruntTask task in GetGruntTasks())
+            {
+                <option @key="task" value="@task.Id">@task.Name (@task.TaskMitreTechniques.Count())</option>
+            }
+        </select>
+    </div>
+    <div class="form-group col-sm-8">
+        <label for="assignedTechniques"><strong>Assigned Techniques</strong></label><br />
+        <table class="table table-striped table-bordered" name="assignedTechniques">
+            <thead>
+                <tr>
+                    <th scope="col">Technique</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Tactics</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td colspan="4">No data available in table</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-sm-4">&nbsp;</div>
+    <div class="form-group col-sm-8">
+        <label for="availableTechniques"><strong>Available Techniques</strong></label><br />
+        <table class="table table-striped table-bordered" name="availableTechniques">
+            <thead>
+                <tr>
+                    <th scope="col">Technique</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Tactics</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@code {
+    private GruntTask _GruntTask;
+
+    [Parameter]
+    public GruntTask GruntTask
+    {
+        get
+        {
+            return _GruntTask;
+        }
+        set
+        {
+            if (value != null && value.Id > 0)
+            {
+                _GruntTask = Service.GetGruntTask(value.Id).WaitResult();
+            }
+            else
+            {
+                _GruntTask = value;
+            }
+        }
+    }
+
+    private IEnumerable<GruntTask> GetGruntTasks()
+    {
+        var excludedTasks = new List<string>() { "Connect", "Disconnect" };
+
+        Task<IEnumerable<GruntTask>> t = Service.GetGruntTasks();
+        t.Wait();
+
+        var result = t.Result
+            .Where(t => !t.CompatibleDotNetVersions.Contains(Common.DotNetVersion.NetCore31))
+            .Where(t => !excludedTasks.Contains(t.Name))
+            .OrderBy(t => t.Name);
+        return result;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await IJSRuntime.InvokeAsync<string>("InitializeSelectPicker", "#tasks.selectpicker");
+        await IJSRuntime.InvokeAsync<string>("DrawAttackTechniqueDataTable", "table[name='availableTechniques']");
+        await IJSRuntime.InvokeAsync<string>("LoadAttackTechniques", "select[name='tasks']");
+    }
+}

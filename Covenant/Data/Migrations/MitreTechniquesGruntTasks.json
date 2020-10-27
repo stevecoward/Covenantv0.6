@@ -1,0 +1,392 @@
+{
+  "RECORDS": [
+    {
+      "MitreTechniqueId": "T1053.005",
+      "GruntTaskId": "1"
+    },
+    {
+      "MitreTechniqueId": "T1003.002",
+      "GruntTaskId": "2"
+    },
+    {
+      "MitreTechniqueId": "T1003.001",
+      "GruntTaskId": "3"
+    },
+    {
+      "MitreTechniqueId": "T1003.006",
+      "GruntTaskId": "4"
+    },
+    {
+      "MitreTechniqueId": "T1046",
+      "GruntTaskId": "5"
+    },
+    {
+      "MitreTechniqueId": "T1558.003",
+      "GruntTaskId": "6"
+    },
+    {
+      "MitreTechniqueId": "T1550.003",
+      "GruntTaskId": "6"
+    },
+    {
+      "MitreTechniqueId": "T1558.003",
+      "GruntTaskId": "7"
+    },
+    {
+      "MitreTechniqueId": "T1003.001",
+      "GruntTaskId": "8"
+    },
+    {
+      "MitreTechniqueId": "T1555",
+      "GruntTaskId": "9"
+    },
+    {
+      "MitreTechniqueId": "T1007",
+      "GruntTaskId": "10"
+    },
+    {
+      "MitreTechniqueId": "T1057",
+      "GruntTaskId": "10"
+    },
+    {
+      "MitreTechniqueId": "T1518",
+      "GruntTaskId": "10"
+    },
+    {
+      "MitreTechniqueId": "T1003.001",
+      "GruntTaskId": "11"
+    },
+    {
+      "MitreTechniqueId": "T1007",
+      "GruntTaskId": "12"
+    },
+    {
+      "MitreTechniqueId": "T1012",
+      "GruntTaskId": "12"
+    },
+    {
+      "MitreTechniqueId": "T1033",
+      "GruntTaskId": "12"
+    },
+    {
+      "MitreTechniqueId": "T1057",
+      "GruntTaskId": "12"
+    },
+    {
+      "MitreTechniqueId": "T1063",
+      "GruntTaskId": "12"
+    },
+    {
+      "MitreTechniqueId": "T1069",
+      "GruntTaskId": "12"
+    },
+    {
+      "MitreTechniqueId": "T1082",
+      "GruntTaskId": "12"
+    },
+    {
+      "MitreTechniqueId": "T1518.001",
+      "GruntTaskId": "12"
+    },
+    {
+      "MitreTechniqueId": "T1047",
+      "GruntTaskId": "13"
+    },
+    {
+      "MitreTechniqueId": "T1546.003",
+      "GruntTaskId": "13"
+    },
+    {
+      "MitreTechniqueId": "T1033",
+      "GruntTaskId": "14"
+    },
+    {
+      "MitreTechniqueId": "T1134.001",
+      "GruntTaskId": "15"
+    },
+    {
+      "MitreTechniqueId": "T1134.003",
+      "GruntTaskId": "15"
+    },
+    {
+      "MitreTechniqueId": "T1134.002",
+      "GruntTaskId": "16"
+    },
+    {
+      "MitreTechniqueId": "T1528",
+      "GruntTaskId": "17"
+    },
+    {
+      "MitreTechniqueId": "T1134.001",
+      "GruntTaskId": "18"
+    },
+    {
+      "MitreTechniqueId": "T1003.001",
+      "GruntTaskId": "19"
+    },
+    {
+      "MitreTechniqueId": "T1047",
+      "GruntTaskId": "20"
+    },
+    {
+      "MitreTechniqueId": "T1003.004",
+      "GruntTaskId": "21"
+    },
+    {
+      "MitreTechniqueId": "T1003.001",
+      "GruntTaskId": "22"
+    },
+    {
+      "MitreTechniqueId": "T1003.002",
+      "GruntTaskId": "22"
+    },
+    {
+      "MitreTechniqueId": "T1003.004",
+      "GruntTaskId": "22"
+    },
+    {
+      "MitreTechniqueId": "T1003.006",
+      "GruntTaskId": "22"
+    },
+    {
+      "MitreTechniqueId": "T1059.003",
+      "GruntTaskId": "23"
+    },
+    {
+      "MitreTechniqueId": "T1059.003",
+      "GruntTaskId": "24"
+    },
+    {
+      "MitreTechniqueId": "T1059.003",
+      "GruntTaskId": "25"
+    },
+    {
+      "MitreTechniqueId": "T1134.002",
+      "GruntTaskId": "25"
+    },
+    {
+      "MitreTechniqueId": "T1134.002",
+      "GruntTaskId": "26"
+    },
+    {
+      "MitreTechniqueId": "T1059.003",
+      "GruntTaskId": "26"
+    },
+    {
+      "MitreTechniqueId": "T1059.001",
+      "GruntTaskId": "27"
+    },
+    {
+      "MitreTechniqueId": "T1059.001",
+      "GruntTaskId": "28"
+    },
+    {
+      "MitreTechniqueId": "T1059.001",
+      "GruntTaskId": "29"
+    },
+    {
+      "MitreTechniqueId": "T1083",
+      "GruntTaskId": "30"
+    },
+    {
+      "MitreTechniqueId": "T1083",
+      "GruntTaskId": "31"
+    },
+    {
+      "MitreTechniqueId": "T1083",
+      "GruntTaskId": "32"
+    },
+    {
+      "MitreTechniqueId": "T1083",
+      "GruntTaskId": "33"
+    },
+    {
+      "MitreTechniqueId": "T1070.004",
+      "GruntTaskId": "34"
+    },
+    {
+      "MitreTechniqueId": "T1057",
+      "GruntTaskId": "35"
+    },
+    {
+      "MitreTechniqueId": "T1057",
+      "GruntTaskId": "36"
+    },
+    {
+      "MitreTechniqueId": "T1105",
+      "GruntTaskId": "37"
+    },
+    {
+      "MitreTechniqueId": "T1041",
+      "GruntTaskId": "38"
+    },
+    {
+      "MitreTechniqueId": "T1113",
+      "GruntTaskId": "39"
+    },
+    {
+      "MitreTechniqueId": "T1037.001",
+      "GruntTaskId": "40"
+    },
+    {
+      "MitreTechniqueId": "T1047",
+      "GruntTaskId": "41"
+    },
+    {
+      "MitreTechniqueId": "T1134.003",
+      "GruntTaskId": "42"
+    },
+    {
+      "MitreTechniqueId": "T1528",
+      "GruntTaskId": "42"
+    },
+    {
+      "MitreTechniqueId": "T1175",
+      "GruntTaskId": "43"
+    },
+    {
+      "MitreTechniqueId": "T1175",
+      "GruntTaskId": "44"
+    },
+    {
+      "MitreTechniqueId": "T1562.001",
+      "GruntTaskId": "45"
+    },
+    {
+      "MitreTechniqueId": "T1056.001",
+      "GruntTaskId": "46"
+    },
+    {
+      "MitreTechniqueId": "T1059.001",
+      "GruntTaskId": "53"
+    },
+    {
+      "MitreTechniqueId": "T1053.005",
+      "GruntTaskId": "56"
+    },
+    {
+      "MitreTechniqueId": "T1053.005",
+      "GruntTaskId": "57"
+    },
+    {
+      "MitreTechniqueId": "T1070.006",
+      "GruntTaskId": "58"
+    },
+    {
+      "MitreTechniqueId": "T1070.006",
+      "GruntTaskId": "59"
+    },
+    {
+      "MitreTechniqueId": "T1105",
+      "GruntTaskId": "59"
+    },
+    {
+      "MitreTechniqueId": "T1053.005",
+      "GruntTaskId": "60"
+    },
+    {
+      "MitreTechniqueId": "T1547.001",
+      "GruntTaskId": "61"
+    },
+    {
+      "MitreTechniqueId": "T1547.001",
+      "GruntTaskId": "62"
+    },
+    {
+      "MitreTechniqueId": "T1047",
+      "GruntTaskId": "63"
+    },
+    {
+      "MitreTechniqueId": "T1546.003",
+      "GruntTaskId": "63"
+    },
+    {
+      "MitreTechniqueId": "T1068",
+      "GruntTaskId": "64"
+    },
+    {
+      "MitreTechniqueId": "T1548.002",
+      "GruntTaskId": "67"
+    },
+    {
+      "MitreTechniqueId": "T1134.002",
+      "GruntTaskId": "67"
+    },
+    {
+      "MitreTechniqueId": "T1134.002",
+      "GruntTaskId": "68"
+    },
+    {
+      "MitreTechniqueId": "T1548.002",
+      "GruntTaskId": "68"
+    },
+    {
+      "MitreTechniqueId": "T1033",
+      "GruntTaskId": "69"
+    },
+    {
+      "MitreTechniqueId": "T1546.015",
+      "GruntTaskId": "70"
+    },
+    {
+      "MitreTechniqueId": "T1135",
+      "GruntTaskId": "71"
+    },
+    {
+      "MitreTechniqueId": "T1069.001",
+      "GruntTaskId": "72"
+    },
+    {
+      "MitreTechniqueId": "T1069.002",
+      "GruntTaskId": "73"
+    },
+    {
+      "MitreTechniqueId": "T1033",
+      "GruntTaskId": "74"
+    },
+    {
+      "MitreTechniqueId": "T1033",
+      "GruntTaskId": "75"
+    },
+    {
+      "MitreTechniqueId": "T1087.002",
+      "GruntTaskId": "75"
+    },
+    {
+      "MitreTechniqueId": "T1135",
+      "GruntTaskId": "75"
+    },
+    {
+      "MitreTechniqueId": "T1135",
+      "GruntTaskId": "76"
+    },
+    {
+      "MitreTechniqueId": "T1112",
+      "GruntTaskId": "77"
+    },
+    {
+      "MitreTechniqueId": "T1112",
+      "GruntTaskId": "78"
+    },
+    {
+      "MitreTechniqueId": "T1012",
+      "GruntTaskId": "79"
+    },
+    {
+      "MitreTechniqueId": "T1112",
+      "GruntTaskId": "80"
+    },
+    {
+      "MitreTechniqueId": "T1106",
+      "GruntTaskId": "81"
+    },
+    {
+      "MitreTechniqueId": "T1069.001",
+      "GruntTaskId": "82"
+    },
+    {
+      "MitreTechniqueId": "T1053.005",
+      "GruntTaskId": "83"
+    }
+  ]
+}

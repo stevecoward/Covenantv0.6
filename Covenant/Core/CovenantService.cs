@@ -25,6 +25,7 @@ using Covenant.Models.Listeners;
 using Covenant.Models.Launchers;
 using Covenant.Models.Grunts;
 using Covenant.Models.Indicators;
+using Covenant.Models.MitreTechniques;
 
 namespace Covenant.Core
 {
@@ -359,8 +360,14 @@ namespace Covenant.Core
         IGruntCommandService, ICommandOutputService, IGruntTaskingService,
         ICredentialService, IIndicatorService, IListenerService, IProfileService, IHostedFileService, ILauncherService
     {
+        Task<int> AssignTechniqueToTask(string mitreTechniqueId, int gruntTaskId);
         Task<IEnumerable<T>> CreateEntities<T>(params T[] entities);
         void DisposeContext();
+        MitreTechnique GetMitreTechnique(string techniqueId);
+        MitreTechniqueGruntTask GetMitreTechniqueGruntTaskByGruntTask(int gruntTaskId);
+        Task<IEnumerable<MitreTechniqueGruntTask>> GetMitreTechniques(int gruntTaskId);
+        Task<IEnumerable<MitreTechnique>> GetMitreTechniques();
+        Task<int> RemoveTechniqueFromTask(string mitreTechniqueId, int gruntTaskId);
     }
 
     public interface IRemoteCovenantService : ICovenantUserService, IIdentityRoleService, IIdentityUserRoleService, IThemeService,
@@ -381,6 +388,8 @@ namespace Covenant.Core
         protected readonly SignInManager<CovenantUser> _signInManager;
         protected readonly IConfiguration _configuration;
         protected readonly ConcurrentDictionary<int, CancellationTokenSource> _cancellationTokens;
+
+        public object MitreTechniques { get; private set; }
 
         public CovenantService(DbContextOptions<CovenantContext> options, CovenantContext context, INotificationService notifier,
             UserManager<CovenantUser> userManager, SignInManager<CovenantUser> signInManager,
@@ -1801,6 +1810,33 @@ namespace Covenant.Core
                 return await this.EditGruntCommand(GruntCommand);
             }
         }
+
+        public async Task<GruntTask> EditGruntTaskAttackTechniques(GruntTask task, string attackTechniques)
+        {
+            var existingAttackTechniqueRecords = (await GetMitreTechniques(task.Id)).Select(AT => AT.Id);
+            existingAttackTechniqueRecords.ToList().ForEach(async AT => _context.MitreTechniquesGruntTasks.Remove(await this.GetMitreTechniqueGruntTask(AT)));
+
+            foreach (string technique in attackTechniques.Trim().Split(","))
+            {
+                _context.MitreTechniquesGruntTasks.Add(new MitreTechniqueGruntTask
+                {
+                    GruntTaskId = task.Id,
+                    MitreTechniqueId = technique,
+                });
+            }
+
+            await _context.SaveChangesAsync();
+            return task;
+        }
+
+        public async Task<MitreTechniqueGruntTask> GetMitreTechniqueGruntTask(int id)
+        {
+            MitreTechniqueGruntTask technique = await _context.MitreTechniquesGruntTasks.FindAsync(id);
+            if (technique == null)
+                throw new ControllerNotFoundException($"NotFound - AttackMatrixTechnique with id: {id}");
+
+            return technique;
+        }
         #endregion
 
         #region GruntTaskComponent ReferenceAssembly Actions
@@ -2034,6 +2070,14 @@ namespace Covenant.Core
         }
         #endregion
 
+        #region GruntTaskComponents AttackMatrixTechnique Actions
+        public async Task<IEnumerable<MitreTechniqueGruntTask>> GetMitreTechniques(int gruntTaskId)
+        {
+            List<MitreTechniqueGruntTask> techniques = await _context.MitreTechniquesGruntTasks.ToListAsync();
+            return techniques.Where(AM => AM.GruntTaskId == gruntTaskId);
+        }
+        #endregion
+
         #region GruntTaskOption Actions
         public async Task<GruntTaskOption> EditGruntTaskOption(GruntTaskOption option)
         {
@@ -2111,6 +2155,7 @@ namespace Covenant.Core
                 .Include("GruntTaskReferenceSourceLibraries.ReferenceSourceLibrary.ReferenceSourceLibraryEmbeddedResources.EmbeddedResource")
                 .Include("GruntTaskReferenceAssemblies.ReferenceAssembly")
                 .Include("GruntTaskEmbeddedResources.EmbeddedResource")
+                .Include("TaskMitreTechniques")
                 .ToListAsync();
         }
 
@@ -2126,6 +2171,8 @@ namespace Covenant.Core
                 .Include("GruntTaskReferenceSourceLibraries.ReferenceSourceLibrary.ReferenceSourceLibraryEmbeddedResources.EmbeddedResource")
                 .Include("GruntTaskReferenceAssemblies.ReferenceAssembly")
                 .Include("GruntTaskEmbeddedResources.EmbeddedResource")
+                .Include("TaskMitreTechniques")
+                .Include("TaskMitreTechniques.MitreTechnique")
                 .AsEnumerable()
                 .Where(T => T.CompatibleDotNetVersions.Contains(grunt.DotNetVersion));
         }
@@ -5145,6 +5192,69 @@ public static class Task
             await _context.SaveChangesAsync();
             // _notifier.OnEditLauncher(this, matchingLauncher);
             return await this.GetWscriptLauncher();
+        }
+        #endregion
+
+        #region Mitre ATT&CK Actions
+        public async Task<string> GetUrlContentsAsync(string url)
+        {
+            var contentString = "";
+            using (var content = new MemoryStream())
+            {
+                var webRequest = (System.Net.HttpWebRequest) System.Net.WebRequest.Create(url);
+                using (System.Net.WebResponse response = await webRequest.GetResponseAsync())
+                {
+                    using (Stream responseStream = response.GetResponseStream())
+                    {
+                        await responseStream.CopyToAsync(content);
+                    }
+                }
+
+                content.Position = 0;
+                var streamReader = new StreamReader(content);
+                contentString = streamReader.ReadToEnd();
+            }
+            
+            return contentString;
+        }
+        public async Task<IEnumerable<MitreTechnique>> GetMitreTechniques()
+        {
+            return await _context.MitreTechniques.ToListAsync();
+        }
+        public MitreTechnique GetMitreTechnique(string techniqueId)
+        {
+            return _context.MitreTechniques
+                .Where(ea => ea.Id == techniqueId)
+                .FirstOrDefault();
+        }
+        public MitreTechniqueGruntTask GetMitreTechniqueGruntTaskByGruntTask(int gruntTaskId)
+        {
+            return _context.MitreTechniquesGruntTasks.Where(obj => obj.GruntTaskId == gruntTaskId).FirstOrDefault();
+        }
+
+        public async Task<int> AssignTechniqueToTask(string mitreTechniqueId, int gruntTaskId)
+        {
+            if (_context.MitreTechniquesGruntTasks
+                .Where(r => r.GruntTaskId == gruntTaskId)
+                .Where(r => r.MitreTechniqueId == mitreTechniqueId)
+                .FirstOrDefault() == null)
+            {
+                await _context.MitreTechniquesGruntTasks.AddAsync(new MitreTechniqueGruntTask
+                {
+                    MitreTechniqueId = mitreTechniqueId,
+                    GruntTaskId = gruntTaskId
+                });
+            }
+
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> RemoveTechniqueFromTask(string mitreTechniqueId, int gruntTaskId)
+        {
+            _context.MitreTechniquesGruntTasks.Remove(_context.MitreTechniquesGruntTasks
+                .Where(obj => obj.MitreTechniqueId == mitreTechniqueId && obj.GruntTaskId == gruntTaskId)
+                .FirstOrDefault());
+            return await _context.SaveChangesAsync();
         }
         #endregion
     }

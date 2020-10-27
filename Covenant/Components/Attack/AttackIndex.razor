@@ -1,0 +1,23 @@
+﻿@page "/attack"
+@page "/attack/index"
+@attribute [Authorize(Roles = "User, Administrator")]
+@inherits OwningComponentBase<ICovenantService>
+@implements IDisposable
+
+@using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components.Authorization
+
+@using Covenant.Core
+@using Covenant.Models.Grunts
+@using Covenant.Components.Attack 
+@inject IJSRuntime IJSRuntime
+@inject INotificationService INotificationService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
+    <h1 class="h2">Task ATT&CK Mapping</h1>
+</div>
+
+<form id="edit-mapping-form">
+    <AttackGruntTaskList />
+</form>

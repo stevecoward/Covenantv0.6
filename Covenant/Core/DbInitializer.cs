@@ -19,6 +19,8 @@ using Covenant.Models.Covenant;
 using Covenant.Models.Launchers;
 using Covenant.Models.Listeners;
 using Covenant.Models.Grunts;
+using Covenant.Models.MitreTechniques;
+using Newtonsoft.Json.Linq;
 
 namespace Covenant.Core
 {
@@ -502,6 +504,67 @@ namespace Covenant.Core
                 };
 
                 await context.Themes.AddRangeAsync(themes);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async static Task InitializeAttackTechniqueTaskMapping(CovenantContext context)
+        {
+            if (!context.MitreTechniquesGruntTasks.Any())
+            {
+                string migrationDataJson = File.ReadAllText(Path.Combine(Common.CovenantMigrationsDirectory, "MitreTechniquesGruntTasks.json"));
+                List<MitreTechniqueGruntTask> records = new List<MitreTechniqueGruntTask>();
+                var jsonData = JObject.Parse(migrationDataJson);
+                var migrationDataObjects = jsonData.SelectToken("$.RECORDS");
+
+                foreach (var record in migrationDataObjects)
+                {
+                    records.Add(new MitreTechniqueGruntTask
+                    {
+                        MitreTechniqueId = record.SelectToken("MitreTechniqueId").Value<string>(),
+                        GruntTaskId = record.SelectToken("GruntTaskId").Value<int>(),
+                    });
+                }
+
+                await context.MitreTechniquesGruntTasks.AddRangeAsync(records);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async static Task InitializeAttackTechniques(CovenantContext context)
+        {
+            if (!context.MitreTechniques.Any())
+            {
+                string enterpriseAttackDataJson = File.ReadAllText(Path.Combine(Common.CovenantMigrationsDirectory, "enterprise-attack.json"));
+                List<MitreTechnique> records = new List<MitreTechnique>();
+                var jsonData = JObject.Parse(enterpriseAttackDataJson);
+                var enterpriseAttackObjects = jsonData.SelectTokens("$.objects[?(@.type == 'attack-pattern')]");
+
+                foreach (var record in enterpriseAttackObjects)
+                {
+                    string mtDescription;
+                    try
+                    {
+                        mtDescription = record.SelectToken("description").Value<string>();
+                    }
+                    catch (Exception)
+                    {
+                        mtDescription = "Top-level technique";
+                    }
+
+                    records.Add(new MitreTechnique
+                    {
+                        Id = record.SelectToken("$.external_references[0]['external_id']").Value<string>(),
+                        Name = record.SelectToken("name").Value<string>(),
+                        Description = mtDescription,
+                        URL = record.SelectToken("$.external_references[0]['url']").Value<string>(),
+                        Tactics = string.Join(", ", record.SelectTokens("$.kill_chain_phases[*]['phase_name']")
+                            .Values().ToList()
+                        ),
+                    });
+                }
+
+                await context.MitreTechniques.AddRangeAsync(records);
                 await context.SaveChangesAsync();
             }
         }
