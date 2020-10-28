@@ -1,4 +1,6 @@
-﻿@using System
+﻿@inherits OwningComponentBase<ICovenantService>
+
+@using System
 @using System.IO
 @using System.Collections.Generic
 @using Microsoft.JSInterop
@@ -19,6 +21,9 @@
         <SortableTableHeader TItem="HostedFile" TItem2="string" GetSortableProperty="(file) => string.Empty">
             <HeaderContent>Download</HeaderContent>
         </SortableTableHeader>
+        <SortableTableHeader TItem="HostedFile" TItem2="string" GetSortableProperty="(file) => string.Empty">
+            <HeaderContent>Delete</HeaderContent>
+        </SortableTableHeader>
     </TableHeader>
     <TableRow Context="file">
         <tr>
@@ -32,6 +37,12 @@
                 <button type="button" class="btn btn-primary" @onclick="e => OnDownload(file)">
                     <span class="fe fe-download"></span>
                     Download
+                </button>
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger" @onclick="e => OnDelete(file.ListenerId, file.Id)">
+                    <span class="fe fe-delete"></span>
+                    Delete
                 </button>
             </td>
         </tr>
@@ -68,9 +79,20 @@
         );
     }
 
+    private async Task OnDelete(int listenerId, int fileId)
+    {
+        await Service.DeleteHostedFile(listenerId, fileId);
+        await ReloadPage(false);
+    }
+
     private bool IsRowDisplayed(HostedFile file, string SearchTerm)
     {
         return SearchTerm == string.Empty ||
             file.Path.Contains(SearchTerm, StringComparison.CurrentCultureIgnoreCase);
+    }
+
+    protected async Task ReloadPage(bool firstRender)
+    {
+        await IJSRuntime.InvokeAsync<string>("ReloadPage");
     }
 }
