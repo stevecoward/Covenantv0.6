@@ -1314,6 +1314,7 @@ namespace Covenant.Core
             matching_grunt.Status = grunt.Status;
             matching_grunt.Integrity = grunt.Integrity;
             matching_grunt.Process = grunt.Process;
+            matching_grunt.ProcessId = grunt.ProcessId;
             matching_grunt.LastCheckIn = grunt.LastCheckIn;
             matching_grunt.ActivationTime = grunt.ActivationTime;
             matching_grunt.IPAddress = grunt.IPAddress;

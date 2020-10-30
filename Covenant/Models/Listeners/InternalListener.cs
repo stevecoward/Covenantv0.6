@@ -788,6 +788,7 @@ namespace Covenant.Models.Listeners
             targetGrunt.Status = APIModels.GruntStatus.Active;
             targetGrunt.Integrity = grunt.Integrity;
             targetGrunt.Process = grunt.Process;
+            targetGrunt.ProcessId = grunt.ProcessId;
             targetGrunt.LastCheckIn = DateTime.UtcNow;
 
             await _client.EditGruntAsync(targetGrunt);

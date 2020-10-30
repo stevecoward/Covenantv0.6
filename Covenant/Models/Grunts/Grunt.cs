@@ -86,6 +86,7 @@ namespace Covenant.Models.Grunts
         [Required]
         public IntegrityLevel Integrity { get; set; } = IntegrityLevel.Untrusted;
         public string Process { get; set; } = "";
+        public int ProcessId { get; set; } = 0;
         public string UserDomainName { get; set; } = "";
         public string UserName { get; set; } = "";
         [DisplayName("IPAddress")]
