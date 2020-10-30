@@ -2073,7 +2073,7 @@ namespace Covenant.Core
         #region GruntTaskComponents AttackMatrixTechnique Actions
         public async Task<IEnumerable<MitreTechniqueGruntTask>> GetMitreTechniques(int gruntTaskId)
         {
-            List<MitreTechniqueGruntTask> techniques = await _context.MitreTechniquesGruntTasks.ToListAsync();
+            List<MitreTechniqueGruntTask> techniques = await _context.MitreTechniquesGruntTasks.Include(nameof(MitreTechnique)).ToListAsync();
             return techniques.Where(AM => AM.GruntTaskId == gruntTaskId);
         }
         #endregion

@@ -82,17 +82,12 @@
     private async Task OnDelete(int listenerId, int fileId)
     {
         await Service.DeleteHostedFile(listenerId, fileId);
-        await ReloadPage(false);
+        await IJSRuntime.InvokeAsync<string>("ReloadPage");
     }
 
     private bool IsRowDisplayed(HostedFile file, string SearchTerm)
     {
         return SearchTerm == string.Empty ||
             file.Path.Contains(SearchTerm, StringComparison.CurrentCultureIgnoreCase);
-    }
-
-    protected async Task ReloadPage(bool firstRender)
-    {
-        await IJSRuntime.InvokeAsync<string>("ReloadPage");
     }
 }

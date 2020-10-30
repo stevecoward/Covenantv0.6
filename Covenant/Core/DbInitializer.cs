@@ -34,6 +34,8 @@ namespace Covenant.Core
             await InitializeTasks(service, context);
             await InitializeRoles(roleManager);
             await InitializeThemes(context);
+            //await InitializeAttackTechniqueTaskMapping(context);
+            await InitializeAttackTechniques(context);
         }
 
         public async static Task InitializeImplantTemplates(ICovenantService service, CovenantContext context)

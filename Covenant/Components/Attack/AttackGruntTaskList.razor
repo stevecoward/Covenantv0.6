@@ -80,11 +80,10 @@
         Task<IEnumerable<GruntTask>> t = Service.GetGruntTasks();
         t.Wait();
 
-        var result = t.Result
+        return t.Result
             .Where(t => !t.CompatibleDotNetVersions.Contains(Common.DotNetVersion.NetCore31))
             .Where(t => !excludedTasks.Contains(t.Name))
             .OrderBy(t => t.Name);
-        return result;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

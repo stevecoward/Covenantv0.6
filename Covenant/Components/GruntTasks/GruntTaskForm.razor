@@ -5,6 +5,7 @@
 @using Covenant.Core
 @using Covenant.Models.Covenant
 @using Covenant.Models.Grunts
+@using Covenant.Models.MitreTechniques 
 @inject IJSRuntime IJSRuntime
 
 <EditForm Model="GruntTask" OnValidSubmit="OnFormSubmit">
@@ -129,6 +130,29 @@
         <div class="text-danger"><ValidationMessage For="() => GruntTask.TokenTask" /></div>
         <div class="text-danger"><ValidationMessage For="() => GruntTask.UnsafeCompile" /></div>
         <div class="text-danger"><ValidationMessage For="() => GruntTask.Compiled" /></div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="accordionAssignedMitreTechniques">Assigned ATT&CK Techniques</label><br />
+            <div class="accordion" id="accordionAssignedMitreTechniques">
+                @foreach (var assignedTechnique in GetMitreTechniquesForGruntTask(GruntTask.Id))
+                {
+                    <div class="card">
+                        <div class="card-header" id="heading-@(assignedTechnique.MitreTechnique.Id)">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-@(assignedTechnique.MitreTechnique.Id)" aria-expanded="false" aria-controls="collapse-@(assignedTechnique.MitreTechnique.Id)">
+                                    @assignedTechnique.MitreTechnique.Id - @assignedTechnique.MitreTechnique.Name
+                                </button>
+                            </h2>
+                        </div>
+
+                        <div id="collapse-@(assignedTechnique.MitreTechnique.Id)" class="collapse" aria-labelledby="heading-@(assignedTechnique.MitreTechnique.Id)" data-parent="#accordionAssignedMitreTechniques">
+                            <div class="card-body">@assignedTechnique.MitreTechnique.Description</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-5">
@@ -474,5 +498,12 @@
     {
         this.GruntTask.CompatibleDotNetVersions = await GetCompatibleDotNetVersions();
         await this.OnSubmit.InvokeAsync(this.GruntTask);
+    }
+
+    private IEnumerable<MitreTechniqueGruntTask> GetMitreTechniquesForGruntTask(int gruntTaskId)
+    {
+        Task<IEnumerable<MitreTechniqueGruntTask>> t = Service.GetMitreTechniques(gruntTaskId);
+        t.Wait();
+        return t.Result;
     }
 }
