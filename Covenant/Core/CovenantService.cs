@@ -1077,6 +1077,7 @@ namespace Covenant.Core
         {
             Grunt grunt = await _context.Grunts
                 .Include(G => G.ImplantTemplate)
+                .Include(nameof(Listener))
                 .FirstOrDefaultAsync(G => G.Id == gruntId);
             if (grunt == null)
             {

@@ -41,6 +41,8 @@ namespace Covenant.Models.Listeners
         public int Id { get; set; }
         [Required, StringLength(100)]
         public string Name { get; set; } = Utilities.CreateShortGuid();
+        [StringLength(10)]
+        public string ShortName => string.IsNullOrEmpty(Name) ? "" : Name.Length > 10 ? Name.Substring(0, 10) : Name;
         [Required, StringLength(100), RegularExpression("^[a-zA-Z0-9]*$")]
         public string GUID { get; set; } = Utilities.CreateShortGuid();
         [Required]

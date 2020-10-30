@@ -34,8 +34,8 @@ namespace Covenant.Core
             await InitializeTasks(service, context);
             await InitializeRoles(roleManager);
             await InitializeThemes(context);
-            //await InitializeAttackTechniqueTaskMapping(context);
             await InitializeAttackTechniques(context);
+            await InitializeAttackTechniqueTaskMapping(context);
         }
 
         public async static Task InitializeImplantTemplates(ICovenantService service, CovenantContext context)
@@ -500,6 +500,39 @@ namespace Covenant.Core
                         InputHighlightColor = "#ffffff",
 
                         TextLinksColor = "#007bff",
+
+                        CodeMirrorTheme = CodeMirrorTheme.night,
+                    },
+                    new Theme
+                    {
+                        Name = "MooseDojo",
+                        Description = "A theme for Moose",
+
+                        BackgroundColor = "#272b30",
+                        BackgroundTextColor = "#e9ecef",
+
+                        PrimaryColor = "#f58f30",
+                        PrimaryTextColor = "#ffffff",
+                        PrimaryHighlightColor = "#f58f30",
+
+                        SecondaryColor = "#6c757d",
+                        SecondaryTextColor = "#ffffff",
+                        SecondaryHighlightColor = "#545b62",
+
+                        TerminalColor = "#181f28",
+                        TerminalTextColor = "#e8edef",
+                        TerminalHighlightColor = "#1ea4da",
+                        TerminalBorderColor = "#97a2ab",
+
+                        NavbarColor = "#3a3f44",
+                        SidebarColor = "#272b30",
+
+                        InputColor = "#e9ecef",
+                        InputDisabledColor = "#cccccc",
+                        InputTextColor = "#212529",
+                        InputHighlightColor = "#0069d9",
+
+                        TextLinksColor = "#2396cd",
 
                         CodeMirrorTheme = CodeMirrorTheme.night,
                     }
